@@ -12,7 +12,7 @@ from django_celery_beat import schedulers
 from django_celery_beat.models import (
     PeriodicTask, PeriodicTasks, IntervalSchedule, CrontabSchedule,
 )
-
+from django_celery_beat.utils import make_aware
 _ids = count(0)
 
 
@@ -112,7 +112,7 @@ class test_ModelEntry(SchedulerCase):
         )
         assert m2.last_run_at
         e2 = self.Entry(m2, app=self.app)
-        assert e2.last_run_at is right_now
+        assert make_aware(e2.last_run_at) == right_now
 
         e3 = e2.next()
         assert e3.last_run_at > e2.last_run_at
