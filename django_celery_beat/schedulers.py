@@ -86,9 +86,10 @@ class ModelEntry(ScheduleEntry):
         if not model.last_run_at:
             model.last_run_at = self._default_now()
         orig = self.last_run_at = model.last_run_at
-        if not is_naive(self.last_run_at):
-            self.last_run_at = self.last_run_at.replace(tzinfo=None)
-        assert orig.hour == self.last_run_at.hour  # timezone sanity
+        naive_last_run_at = self.last_run_at
+        if not is_naive(naive_last_run_at):
+            naive_last_run_at = naive_last_run_at.replace(tzinfo=None)
+        assert orig.hour == naive_last_run_at.hour  # timezone sanity
 
     def _disable(self, model):
         model.no_changes = True
